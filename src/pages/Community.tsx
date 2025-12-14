@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import CommunityHeader from "../components/boardHeader";
+import Boardheader from "../components/boardHeader";
 import Footer from "../components/footer";
 import Features from "../components/features";
 
@@ -11,7 +11,7 @@ function Community() {
     }, []);
     return (
         <div className='flex flex-col w-full bg-[#7a1410] px-8 py-8 lg:px-14 lg:py-14'>
-            <boardHeader details="" title="The Team" />
+            <Boardheader details="" title="The Team" />
             <Features />
             <Footer />
         </div>
