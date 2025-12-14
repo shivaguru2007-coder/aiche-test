@@ -1,164 +1,147 @@
-import { BrowserRouter as Router, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { Analytics } from '@vercel/analytics/react';
+
+// Import Pages
 import About from './pages/About';
 import Community from './pages/Community';
 import Food from './pages/Events';
 import Retail from './pages/RetailMarket';
 import Menu from './pages/Menu';
+
+// Import Assets
 import logo from './assets/logo.png';
-import {motion} from 'framer-motion';
-import { Analytics } from '@vercel/analytics/react';
 
-const PANEL_ROUTES: Record<string, string> = {
-  home: '/',
-  one: '/events',
-  two: '/insider',
-  three: '/board',
-};
+// --- Configuration ---
+// This array controls your entire navigation structure.
+// Add a new item here, and it automatically appears in Mobile and Desktop views.
+const NAV_ITEMS = [
+  {
+    id: 'home',
+    path: '/',
+    label: 'Home',
+    component: <About />,
+    bgColor: '#d4b483',
+    activeColor: '#d4b483', // Home stays same color
+    hasLogo: true, 
+  },
+  {
+    id: 'events',
+    path: '/events',
+    label: 'Events',
+    component: <Food />,
+    bgColor: '#c94141',
+    activeColor: '#5ea3ec',
+    delay: 0,
+  },
+  {
+    id: 'insider',
+    path: '/insider',
+    label: 'Insider',
+    component: <Retail />,
+    bgColor: '#91191a',
+    activeColor: '#f64444',
+    delay: 0.3,
+  },
+  {
+    id: 'board',
+    path: '/board',
+    label: 'Board',
+    component: <Community />,
+    bgColor: '#7a1410',
+    activeColor: '#ffb400',
+    delay: 0.6,
+  },
+];
 
-const ROUTE_PANELS: Record<string, string> = {
-  '/': 'home',
-  '/events': 'one',
-  '/insider': 'two',
-  '/board': 'three',
-};
-
-function AppContent() {
-  const location = useLocation(); {/* get current URL path */}
-  const navigate = useNavigate(); {/* programmatically changes the URL path */}
+function App() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [isDesktop, setIsDesktop] = useState<boolean>(window.innerWidth >= 1024);
-  const [activePanel, setActivePanel] = useState<string>('home');
 
   // Handle screen resize
   useEffect(() => {
-    const handleResize = () => {
-      const isNowDesktop = window.innerWidth >= 1024;
-      setIsDesktop(isNowDesktop);
-    };
-
+    const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Sync active panel with route on mount or location change. Runs when from mobile to desktop
-  useEffect(() => {
-    const panel = ROUTE_PANELS[location.pathname]; {/* get the panel corresponding to the current URL path */}
-
-    {/* if route maps to a panel and it's different, keep state in sync regardless of viewport */}
-    if (panel && panel !== activePanel) {
-      setActivePanel(panel);
-    }
-  }, [location.pathname, isDesktop, activePanel]); {/* dependencies; effect triggered when one or both of these values change */}
-
-  const handlePanelClick = (id: string) => {
-    setActivePanel(id);
-    window.scrollTo(0, 0);
-    // Always change the URL when a panel is selected so deep-links and back/forward work
-    const route = PANEL_ROUTES[id];
-    if (route) navigate(route);
-  };
-
+  // --- Mobile View ---
   if (!isDesktop) {
     return (
-      <Routes>
-        <Route path="/" element={<div className="box-border h-screen w-full m-0 p-0"><About /></div>} />
-        <Route path="/events" element={<div className="box-border h-screen w-full m-0 p-0"><Food /></div>} />
-        <Route path="/insider" element={<div className="box-border h-screen w-full m-0 p-0"><Retail /></div>} />
-        <Route path="/board" element={<div className="box-border h-screen w-full m-0 p-0"><Community /></div>} />
-        <Route path="/menu" element={<div className="box-border h-screen w-full m-0 p-0"><Menu /></div>} />
-      </Routes>
+      <>
+        <Routes>
+          {NAV_ITEMS.map((item) => (
+            <Route 
+              key={item.id} 
+              path={item.path} 
+              element={<div className="box-border h-screen w-full m-0 p-0">{item.component}</div>} 
+            />
+          ))}
+          {/* Extra Route for Menu if it doesn't fit the panel structure */}
+          <Route path="/menu" element={<div className="box-border h-screen w-full m-0 p-0"><Menu /></div>} />
+        </Routes>
+        <Analytics />
+      </>
     );
   }
 
-  // Desktop view
+  // --- Desktop View ---
   return (
     <div className="relative h-full w-full m-0 p-0 overflow-x-hidden selection:bg-black selection:text-white">
-      <div className="lg:flex w-full h-full hidden">
-        {/* Home Panel */}
-        <div
-          className={`relative transition-all duration-500 bg-[#d4b483] ${activePanel === 'home' ? 'w-[88%] h-screen z-10 ' : 'w-[4%] cursor-pointer'}`}
-          onClick={() => handlePanelClick('home')}
-        >
-          {activePanel === 'home' ? (
-            <div className="scrollable h-full">
-              <About />
-            </div>
-          ) : (
-            <div className="w-16 h-fit mt-16 px-0.5 flex justify-center">
-              <img className="w-full" src={logo} alt="Logo" />
-            </div>
-          )}
-        </div>
+      <div className="flex w-full h-full">
+        
+        {NAV_ITEMS.map((item) => {
+          // Fix: Ensure comparison handles uppercase/lowercase URLs correctly
+          const isActive = location.pathname.toLowerCase() === item.path.toLowerCase();
 
-        {/* Food Panel */}
-        <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{     // smooth drop
-          opacity: { duration: 1, ease: "easeOut" },   // synced fade
-        }}
-          className={`relative transition-all duration-500 bg-[#c94141] ${activePanel === 'one' ? 'w-[88%] h-screen bg-[#5ea3ec] z-20' : 'w-[4%] cursor-pointer'}`}
-          onClick={() => handlePanelClick('one')}
-        >
-          {activePanel === 'one' ? (
-            <div className="scrollable h-full"><Food /></div>
-          ) : (
-            <div className="h-full relative text-black">
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90 tracking-wider options-text text-xl">Events</div>
-            </div>
-          )}
-        </motion.div>
-
-        {/* Retail Panel */}
-        <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{     // smooth drop
-          opacity: { duration: 1, ease: "easeOut", delay: 0.3 },   // synced fade
-        }}
-          className={`relative transition-all duration-500 bg-[#91191a] ${activePanel === 'two' ? 'w-[88%] h-screen bg-[#f64444] z-30' : 'w-[4%] cursor-pointer'}`}
-          onClick={() => handlePanelClick('two')}
-        >
-          {activePanel === 'two' ? (
-            <div className="scrollable h-full"><Retail /></div>
-          ) : (
-            <div className="h-full relative text-black">
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90 tracking-wider options-text text-xl">Insider</div>
-            </div>
-          )}
-        </motion.div>
-
-        {/* Community Panel */}
-        <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{     // smooth drop
-          opacity: { duration: 1, ease: "easeOut", delay: 0.6 },   // synced fade
-        }}
-          className={`relative transition-all duration-500 bg-[#7a1410] ${activePanel === 'three' ? 'w-[88%] h-screen bg-[#ffb400] z-40' : 'w-[4%] cursor-pointer'}`}
-          onClick={() => handlePanelClick('three')}
-        >
-          {activePanel === 'three' ? (
-            <div className="scrollable h-full"><Community /></div>
-          ) : (
-            <div className="h-full relative text-black">
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1 rotate-90 tracking-wider options-text text-xl">Board</div>
-            </div>
-          )}
-        </motion.div>
+          return (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{
+                opacity: { duration: 1, ease: "easeOut", delay: item.delay || 0 },
+              }}
+              // Determine width and color based on active state
+              className={`relative transition-all duration-500 cursor-pointer overflow-hidden ${
+                isActive ? 'w-[88%] h-screen z-10' : 'w-[4%]'
+              }`}
+              style={{ backgroundColor: isActive ? item.activeColor : item.bgColor }}
+              onClick={() => {
+                if (!isActive) {
+                  navigate(item.path);
+                  window.scrollTo(0, 0);
+                }
+              }}
+            >
+              {isActive ? (
+                // --- EXPANDED CONTENT ---
+                <div className="scrollable h-full cursor-default">
+                  {item.component}
+                </div>
+              ) : (
+                // --- COLLAPSED TAB ---
+                <div className="h-full relative text-black flex justify-center">
+                  {item.hasLogo ? (
+                    <div className="w-16 h-fit mt-16 px-0.5">
+                      <img className="w-full" src={logo} alt="Logo" />
+                    </div>
+                  ) : (
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90 tracking-wider options-text text-xl whitespace-nowrap">
+                      {item.label}
+                    </div>
+                  )}
+                </div>
+              )}
+            </motion.div>
+          );
+        })}
+        
       </div>
-    </div>
-  );
-}
-
-function App() {
-  return (
-    <>
-      <Router>
-        <AppContent />
-      </Router>
       <Analytics />
-    </>
+    </div>
   );
 }
 

@@ -21,21 +21,21 @@ const MenuOptions = () => {
             transition={{ duration: 0.1, ease: "easeIn"}}
             className="bg-neutral-200 h-full md:h-full text-center flex items-center justify-center options-text md:text-4xl text-2xl cursor-pointer">About</motion.div>
             
-            <motion.div onClick={() => handleClick("/food")}
+            <motion.div onClick={() => handleClick("/events")}
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0}}
             viewport={{ once: true }} // `once: true` ensures it only triggers once
             transition={{ duration: 0.1, ease: "easeIn", delay: 0.1 }}
             className="bg-[#002853] h-full md:h-full text-center flex items-center justify-center options-text md:text-4xl text-2xl cursor-pointer">Events</motion.div>
             
-            <motion.div onClick={() => handleClick("/retail")}
+            <motion.div onClick={() => handleClick("/insider")}
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0}}
             viewport={{ once: true }} // `once: true` ensures it only triggers once
             transition={{ duration: 0.1, ease: "easeIn", delay: 0.2 }}
             className="bg-[#4c03d3] h-full md:h-full text-center flex items-center justify-center options-text md:text-4xl text-2xl cursor-pointer">Insider</motion.div>
             
-            <motion.div onClick={() => handleClick("/community")}
+            <motion.div onClick={() => handleClick("/board")}
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0}}
             viewport={{ once: true }} // `once: true` ensures it only triggers once

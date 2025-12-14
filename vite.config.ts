@@ -7,8 +7,9 @@ export default defineConfig({
   plugins: [react(), tailwindcss(),],
   server: {
     allowedHosts: [
-'.trycloudflare.com'
+'.trycloudflare.com','.netlify.app','localhost'
     ]
-  }
+  },
+  base: './'
 }
 )
