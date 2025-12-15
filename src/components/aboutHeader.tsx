@@ -95,20 +95,20 @@ const Header = () => {
                                 variants={lineVariant}
                                 initial="hidden"
                                 animate="visible"
-                                className="absolute top-0 left-0 w-full bg-white" 
+                                className="absolute top-0 left-0 w-full bg-black" 
                             />
                         </div>
 
                         {/* The Headline Text */}
                         <div className="flex flex-col justify-center">
-                            {["LEAD", "INNOVATE", "ACHIEVE"].map((text, i) => (
+                            {["A set of engineers,", "Built different"].map((text, i) => (
                                 <motion.h1
                                     key={text}
                                     custom={i}
                                     variants={textVariant}
                                     initial="hidden"
                                     animate="visible"
-                                    className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[0.9] heading-text text-black"
+                                    className="text-5xl md:text-7xl lg:text-8xl font-semi-bold tracking-tight leading-[0.9] uppercase heading-text text-black"
                                 >
                                     {text}
                                 </motion.h1>
