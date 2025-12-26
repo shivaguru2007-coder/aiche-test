@@ -14,7 +14,17 @@ const AboutEvents = () => {
                     Events<br />Coming Up
                 </h1>
             </div>
-            <TickerTape text="REGISTRATIONS OPEN // AIChE VIT // INNOVATION FOR FUTURE" direction="left" />
+            <TickerTape text="REGISTRATIONS OPEN // AIChE VIT" direction="left" />
+            <div className="w-full flex flex-col md:flex-row border-b-2 border-black">
+                <div className="group flex-1 flex flex-col items-center justify-center py-12 px-4 border-b-2 md:border-b-0 md:border-r-2 border-black transition-colors duration-300 hover:bg-black hover:text-[#E6D5B8] cursor-crosshair">
+                    <span className="font-mono text-xs mb-2 opacity-60">01/2026</span>
+                    <h3 className="text-xl md:text-2xl text-center font-bold uppercase leading-tight">Yantra Event</h3>
+                </div>
+                <div className="group flex-1 flex flex-col items-center justify-center py-12 px-4 border-b-2 md:border-b-0 md:border-r-2 border-black transition-colors duration-300 hover:bg-black hover:text-[#E6D5B8] cursor-crosshair">
+                    <span className="font-mono text-xs mb-2 opacity-60">03/2026</span>
+                    <h3 className="text-xl md:text-2xl text-center font-bold uppercase leading-tight">Chemathon <br/>7.0</h3>
+                </div>
+         {/*
             <div className="w-full flex flex-col md:flex-row border-b-2 border-black">
                 <div className="group flex-1 flex flex-col items-center justify-center py-12 px-4 border-b-2 md:border-b-0 md:border-r-2 border-black transition-colors duration-300 hover:bg-black hover:text-[#E6D5B8] cursor-crosshair">
                     <span className="font-mono text-xs mb-2 opacity-60">09/21</span>
@@ -24,13 +34,12 @@ const AboutEvents = () => {
                     <span className="font-mono text-xs mb-2 opacity-60">02/07</span>
                     <h3 className="text-xl md:text-2xl text-center font-bold uppercase leading-tight">Operation Antidote:<br/>The Final Formula</h3>
                 </div>
-                <div className="group flex-1 flex flex-col items-center justify-center py-12 px-4 transition-colors duration-300 hover:bg-black hover:text-[#E6D5B8] cursor-crosshair">
+  <div className="group flex-1 flex flex-col items-center justify-center py-12 px-4 transition-colors duration-300 hover:bg-black hover:text-[#E6D5B8] cursor-crosshair">
                     <span className="font-mono text-xs mb-2 opacity-60">12/11</span>
                     <h3 className="text-xl md:text-2xl text-center font-bold uppercase leading-tight">Hazard Protocol</h3>
-                </div>
+                </div>*/}
             </div>
 
-            {/* BUTTON BAR (Same as before) */}
             <div className="w-full flex justify-center py-12 border-b-2 border-black border-dashed bg-[#E6D5B8]">
                 <button 
                     onClick={() => handleClick("./events")} 
@@ -39,8 +48,6 @@ const AboutEvents = () => {
                     View All Archives
                 </button>
             </div>
-
-            {/* --- REMODELED BOTTOM SECTION --- */}
             <div className="grid md:grid-cols-2 w-full md:mt-16 mt-8 gap-8 px-4 md:px-0">
                 
                 {/* === NEW "MEET THE TEAM" COMPONENT === */}

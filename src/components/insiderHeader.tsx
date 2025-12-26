@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import classNames from 'classnames';
+//import classNames from 'classnames';
 import logo from '../assets/header.png';
 import sidebar from '../assets/sidebarmenu.png';
 import { motion, Variants, useScroll, useMotionValueEvent } from 'framer-motion';
@@ -11,17 +11,21 @@ interface EventHeaderProps {
   bgHover: string;
 }
 
-const Insider = ({ hours, schedule, title, bgHover }: EventHeaderProps) => {
-  const [isHidden, setIsHidden] = useState(true);
+const Insider = ({ hours, schedule, title }: EventHeaderProps) => {
+  const [isHidden, setIsHidden] = useState(false);
   const { scrollY } = useScroll();
 
   const handleClick = (url: string) => { window.location.href = url; };
 
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    const previous = scrollY.getPrevious() || 0;
-    setIsHidden(latest > previous && latest > 150);
-  });
-
+    useMotionValueEvent(scrollY, "change", (latest) => {
+        const previous = scrollY.getPrevious() || 0;
+        // Hide if scrolling down and moved past 150px
+        if (latest > previous && latest > 150) {
+            setIsHidden(true);
+        } else {
+            setIsHidden(false);
+        }
+    });
   const textReveal: Variants = {
     hidden: { y: "100%", opacity: 0 },
     show: { 
@@ -30,26 +34,43 @@ const Insider = ({ hours, schedule, title, bgHover }: EventHeaderProps) => {
       transition: { duration: 0.8, ease: [0.19, 1, 0.22, 1] } 
     }
   };
-
+  const navVariants = {
+        visible: { y: 0, opacity: 1 },
+        hidden: { y: "-100%", opacity: 0 },
+    };
   return (
     <div className="relative min-h-screen w-full text-white overflow-x-hidden selection:bg-white selection:text-black font-sans">
       
       {/* --- Navbar --- */}
-      <motion.nav
-        animate={isHidden ? { y: -100 } : { y: 0 }}
-        transition={{ duration: 0.4 }}
-        className='fixed top-0 left-0 w-full px-6 py-4 z-50 flex justify-between items-center bg-black/10 backdrop-blur-md border-b border-white/5'
-      >
-        <div onClick={() => handleClick("/")} className='w-10 cursor-pointer'>
-          <img src={logo} alt="Logo" className="w-full invert" />
-        </div>
-        <div 
-          onClick={() => handleClick("/menu")} 
-          className={classNames("w-10 h-10 flex items-center justify-center rounded-full cursor-pointer transition-all border border-white/20", bgHover)}
-        >
-          <img src={sidebar} alt="Menu" className="w-5 h-5 invert" />
-        </div>
-      </motion.nav>
+
+            <motion.nav
+                variants={navVariants}
+                initial="visible"
+                animate={isHidden ? "hidden" : "visible"}
+                transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+                className="fixed top-0 left-0 w-full flex justify-between items-center px-6 py-8 md:px-16 z-[100] bg-transparent pointer-events-none"
+            >
+                {/* Logo */}
+                <motion.img 
+                    src={logo} 
+                    alt="Logo" 
+                    className="w-24 md:hidden md:w-32 cursor-pointer pointer-events-auto mix-blend-multiply"
+                    onClick={() => handleClick("/")}
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
+                />
+
+                {/* Menu Trigger */}
+                <motion.img
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    onClick={() => handleClick("/menu")}
+className="w-12 md:hidden block cursor-pointer hover:opacity-70 transition-opacity pointer-events-auto"
+                    src={sidebar}
+                    alt="Menu"
+                />
+            </motion.nav>
 
       <div className="flex flex-col md:flex-row min-h-screen w-full">
         

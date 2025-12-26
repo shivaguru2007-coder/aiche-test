@@ -34,7 +34,7 @@ const Options = () => {
   const [activeId, setActiveId] = useState<string | null>('car');
 
   return (
-    <div className="flex flex-col mb-24 w-full px-4 md:px-0">
+    <div className="flex flex-col mt-20 mb-24 w-full px-4 md:px-0">
       
       {/* Header Section */}
       <div className="mb-12 flex flex-col items-center text-center">

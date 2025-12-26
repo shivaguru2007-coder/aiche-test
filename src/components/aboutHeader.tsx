@@ -11,9 +11,9 @@ const Header = () => {
     const { scrollY } = useScroll();
 
     useMotionValueEvent(scrollY, "change", (latest) => {
-        const previous = scrollY.getPrevious() ?? 0;
-        // Hide if scrolling down and moved past 150px, show if scrolling up
-        if (latest > previous && latest > 1) {
+        const previous = scrollY.getPrevious() || 0;
+        // Hide if scrolling down and moved past 150px
+        if (latest > previous && latest > 150) {
             setIsHidden(true);
         } else {
             setIsHidden(false);

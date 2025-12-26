@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { motion, useScroll, useMotionValueEvent, Variants } from 'framer-motion';
+import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
 import sidebar from '../assets/sidebarmenu.png';
 import logo from '../assets/header.png';
-
+//import classNames from 'classnames';
 interface CommunityHeaderProps {
     details: string;
     title: string;
@@ -20,7 +20,7 @@ const BoardHeader = ({ details, title }: CommunityHeaderProps) => {
     useMotionValueEvent(scrollY, "change", (latest) => {
         const previous = scrollY.getPrevious() || 0;
         // Hide if scrolling down and moved past 150px
-        if (latest > previous && latest > 150) {
+        if (latest > previous && latest > 1) {
             setIsHidden(true);
         } else {
             setIsHidden(false);
@@ -28,7 +28,7 @@ const BoardHeader = ({ details, title }: CommunityHeaderProps) => {
     });
 
     // --- Navbar Variants ---
-    const navVariants: Variants = {
+    const navVariants = {
         visible: { y: 0, opacity: 1 },
         hidden: { y: "-100%", opacity: 0 },
     };
@@ -38,23 +38,34 @@ const BoardHeader = ({ details, title }: CommunityHeaderProps) => {
             <div className="w-full h-auto mt-10 md:block hidden">
             </div>
 
-            {/* --- Fixed Navbar with Scroll Logic --- */}
-            <motion.div
+            <motion.nav
                 variants={navVariants}
                 initial="visible"
                 animate={isHidden ? "hidden" : "visible"}
-                transition={{ duration: 0.35, ease: "easeInOut" }}
-                // Added 'top-0 z-50' to ensure it sticks to top and stays above content
-                className='flex justify-between items-center fixed top-0 left-0 w-full lg:pr-28 pr-16 md:hidden z-50 pt-4 pl-4'
+                transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+                className="fixed top-0 left-0 w-full flex justify-between items-center px-6 py-8 md:px-16 z-[100] bg-transparent pointer-events-none"
             >
-                <div onClick={() => handleClick("/")} className='w-12 cursor-pointer hover:scale-105 transition-transform'>
-                    <img src={logo} alt="Logo" className="w-full h-auto object-contain" />
-                </div>
-                <div onClick={() => handleClick("/menu")} className='w-16 hover:bg-[rgb(204,165,76)] rounded-[5px] duration-150 ease-out cursor-pointer'>
-                    <img src={sidebar} alt="Menu" />
-                </div>
-            </motion.div>
+                {/* Logo */}
+                <motion.img 
+                    src={logo} 
+                    alt="Logo" 
+                    className="w-24 md:hidden md:w-32 cursor-pointer pointer-events-auto mix-blend-multiply"
+                    onClick={() => handleClick("/")}
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
+                />
 
+                {/* Menu Trigger */}
+                <motion.img
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    onClick={() => handleClick("/menu")}
+className="w-12 md:hidden block cursor-pointer hover:opacity-70 transition-opacity pointer-events-auto"
+                    src={sidebar}
+                    alt="Menu"
+                />
+            </motion.nav>
             <motion.div
                 initial={{ opacity: 0, x: 25 }}
                 whileInView={{ opacity: 1, x: 0 }}

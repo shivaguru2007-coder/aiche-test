@@ -26,21 +26,21 @@ const MenuOptions = () => {
             whileInView={{ opacity: 1, x: 0}}
             viewport={{ once: true }} // `once: true` ensures it only triggers once
             transition={{ duration: 0.1, ease: "easeIn", delay: 0.1 }}
-            className="bg-[#c94141] h-full md:h-full text-center flex items-center justify-center options-text md:text-4xl text-2xl cursor-pointer">Events</motion.div>
+            className="bg-[#8e1a1a] h-full md:h-full text-center flex items-center justify-center options-text md:text-4xl text-2xl cursor-pointer">Events</motion.div>
             
             <motion.div onClick={() => handleClick("/insider")}
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0}}
             viewport={{ once: true }} // `once: true` ensures it only triggers once
             transition={{ duration: 0.1, ease: "easeIn", delay: 0.2 }}
-            className="bg-[#91191a] h-full md:h-full text-center flex items-center justify-center options-text md:text-4xl text-2xl cursor-pointer">Insider</motion.div>
+            className="bg-[#7a1410] h-full md:h-full text-center flex items-center justify-center options-text md:text-4xl text-2xl cursor-pointer">Insider</motion.div>
             
             <motion.div onClick={() => handleClick("/board")}
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0}}
             viewport={{ once: true }} // `once: true` ensures it only triggers once
             transition={{ duration: 0.1, ease: "easeIn", delay: 0.3 }}
-            className="bg-[#7a1410] h-full md:h-full text-center flex items-center justify-center options-text md:text-4xl text-2xl cursor-pointer">Meet The Team</motion.div>
+            className="bg-[#551d1c] h-full md:h-full text-center flex items-center justify-center options-text md:text-4xl text-2xl cursor-pointer">Meet The Team</motion.div>
         </div>
     </div>
   );
