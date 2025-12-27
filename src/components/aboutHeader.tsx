@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion, Variants, useScroll, useMotionValueEvent } from 'framer-motion'; 
+import { motion, Variants, useScroll, useMotionValueEvent, useMotionValue, useMotionTemplate } from 'framer-motion'; 
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/header.png';
 import image from '../assets/core.jpg';
@@ -12,13 +12,27 @@ const Header = () => {
 
     useMotionValueEvent(scrollY, "change", (latest) => {
         const previous = scrollY.getPrevious() || 0;
-        // Hide if scrolling down and moved past 150px
         if (latest > previous && latest > 150) {
             setIsHidden(true);
         } else {
             setIsHidden(false);
         }
     });
+
+    // --- Mouse Tracking for Image Effect ---
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+    const [isHovered, setIsHovered] = useState(false);
+
+    // Flashlight radius size
+    const maskImage = useMotionTemplate`radial-gradient(circle at ${mouseX}px ${mouseY}px, black 10%, transparent 200px)`;
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        const { left, top } = e.currentTarget.getBoundingClientRect();
+        mouseX.set(e.clientX - left);
+        mouseY.set(e.clientY - top);
+    };
+
     // --- Animation Variants ---
     const navVariants: Variants = {
         visible: { y: 0, opacity: 1 },
@@ -36,8 +50,9 @@ const Header = () => {
     const handleClick = (url: string) => {
         navigate(url);
     };
+
     return (
-        <div className="relative w-full min-h-screen bg-transparent overflow-x-hidden">
+        <div className="relative w-full min-h-screen overflow-x-hidden"> {/* Added a slight bg color to match your screenshot beige, change if needed */}
             
             {/* === 1. NAVIGATION (Logo & Menu) === */}
             <motion.nav
@@ -63,19 +78,19 @@ const Header = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     onClick={() => handleClick("/menu")}
-className="w-12 md:hidden block cursor-pointer hover:opacity-70 transition-opacity pointer-events-auto"
+                    className="w-12 md:hidden block cursor-pointer hover:opacity-70 transition-opacity pointer-events-auto"
                     src={sidebar}
                     alt="Menu"
                 />
             </motion.nav>
 
             {/* === 2. HERO CONTENT === */}
-            <main className="max-w-7xl mx-auto px-6 md:px-12 pt-32 lg:pt-0 min-h-screen flex items-center">
-                <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20 w-full">
+            <main className="max-w-[1400px] mx-auto px-6 md:px-12 pt-32 lg:pt-0 min-h-screen flex items-center">
+                <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-16 w-full">
                     
-                    {/* LEFT: Typography */}
-                    <div className="w-full lg:w-3/5 space-y-8 relative z-10">
-                        <div className="flex gap-6 md:gap-10">
+                    {/* LEFT: Typography (Adjusted width to 55%) */}
+                    <div className="w-full lg:w-[55%] space-y-8 relative z-10">
+                        <div className="flex gap-6 md:gap-8">
                             {/* Animated Vertical Line */}
                             <div className="w-[2px] md:w-[3px] bg-black/10 relative overflow-hidden h-auto min-h-[150px]">
                                 <motion.div 
@@ -95,7 +110,7 @@ className="w-12 md:hidden block cursor-pointer hover:opacity-70 transition-opaci
                                             variants={textReveal}
                                             initial="hidden"
                                             animate="visible"
-                                            className="text-[10vw] md:text-[7vw] lg:text-[6.5vw] heading-text uppercase leading-[0.85] tracking-tighter text-black"
+                                            className="text-[8vw] md:text-[5vw] lg:text-[5vw] heading-text uppercase leading-[0.85] tracking-tighter text-black"
                                         >
                                             {text}
                                         </motion.h1>
@@ -109,39 +124,47 @@ className="w-12 md:hidden block cursor-pointer hover:opacity-70 transition-opaci
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 0.7, x: 0 }}
                             transition={{ delay: 1, duration: 0.8 }}
-                            className="max-w-md text-base md:text-lg font-light leading-relaxed md:ml-16 border-t border-black/10 pt-8 text-black"
+                            className="max-w-md text-base md:text-lg font-light leading-relaxed md:ml-12 border-t border-black/10 pt-8 text-black"
                         >
                             Established in 2014, <span className="font-bold">AIChE VIT</span> stands as the powerhouse of chemical innovation at VIT Vellore. Technical brilliance meets social impact.
                         </motion.p>
                     </div>
 
-                    {/* RIGHT: Polaroid Image */}
-                    <div className="w-full lg:w-2/5 flex justify-center lg:justify-end">
+                    {/* RIGHT: Spotlight Image Section (Increased width to 45% and reduced padding) */}
+                    <div className="w-full lg:w-[45%] flex justify-center lg:justify-start lg:border-l border-black/10 lg:pl-10 py-4">
                         <motion.div 
-                            initial={{ opacity: 0, rotate: 5, scale: 0.9 }}
-                            animate={{ opacity: 1, rotate: -2, scale: 1 }}
-                            transition={{ delay: 1.2, duration: 1, type: "spring" }}
-                            className="relative w-full max-w-sm aspect-[3/4] p-4 bg-white shadow-2xl border border-black/5 hover:rotate-0 transition-transform duration-500 ease-out"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 1.2, duration: 0.8 }}
+                            className="relative w-full aspect-[4/3] overflow-hidden bg-black/5"
+                            onMouseMove={handleMouseMove}
+                            onMouseEnter={() => setIsHovered(true)}
+                            onMouseLeave={() => setIsHovered(false)}
                         >
-                            {/* Tape Accent */}
-                            <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-8 bg-black/5 backdrop-blur-md z-20 border-x border-black/5" />
-                            
-                            {/* Image Container */}
-                            <div className="w-full h-full overflow-hidden bg-black border border-black/5">
-                                <motion.img 
-                                    initial={{ scale: 1.2, filter: "grayscale(100%)" }}
-                                    animate={{ scale: 1, filter: "grayscale(0%)" }}
-                                    transition={{ delay: 1.8, duration: 1.5 }}
+                            {/* Layer 1: Grayscale Image (Always Visible) */}
+                            <img 
+                                src={image} 
+                                alt="Core Team Grayscale" 
+                                className="absolute inset-0 w-full h-full object-cover filter grayscale contrast-125 pointer-events-none"
+                            />
+
+                            {/* Layer 2: Color Image (Visible only via Mask) */}
+                            <motion.div
+                                className="absolute inset-0 w-full h-full bg-transparent"
+                                animate={{ opacity: isHovered ? 1 : 0 }}
+                                transition={{ duration: 0.2 }}
+                                style={{ 
+                                    maskImage: maskImage,
+                                    WebkitMaskImage: maskImage 
+                                }}
+                            >
+                                <img 
                                     src={image} 
-                                    alt="Core Team" 
-                                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
+                                    alt="Core Team Color" 
+                                    className="w-full h-full object-cover contrast-110"
                                 />
-                            </div>
-                            
-                            {/* Industrial Caption */}
-                            <div className="absolute bottom-1 right-2 font-mono text-[8px] opacity-30 uppercase">
-                                // CHAPTER_CORE_2025 // FIG 1.1
-                            </div>
+                            </motion.div>
+
                         </motion.div>
                     </div>
 

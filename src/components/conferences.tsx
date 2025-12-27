@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { motion, useMotionTemplate, useMotionValue, useSpring } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
 
 // --- Types ---
 interface TiltCardProps {
@@ -11,58 +11,13 @@ interface TiltCardProps {
 }
 
 // --- 3D Tilt Card Component ---
-const TiltCard: React.FC<TiltCardProps> = ({ title, subtitle, tag, text, delay = 0 }) => {
-  const ref = useRef<HTMLDivElement>(null);
+const TiltCard: React.FC<TiltCardProps> = ({ title, subtitle, tag, text}) => {
 
   // Motion values for mouse position
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
 
-  // Spring physics for smooth animation return
-  const xSpring = useSpring(x, { stiffness: 300, damping: 30 });
-  const ySpring = useSpring(y, { stiffness: 300, damping: 30 });
-
-  // Map mouse position to rotation degrees
-  const rotateX = useMotionTemplate`${ySpring}deg`;
-  const rotateY = useMotionTemplate`${xSpring}deg`;
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
-
-    const rect = ref.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-
-    const mouseX = (e.clientX - rect.left) * 2.5;
-    const mouseY = (e.clientY - rect.top) * 2.5;
-
-    // Calculate rotation (max 20 degrees)
-    const rX = (mouseY / height - 0.5) * -20;
-    const rY = (mouseX / width - 0.5) * 20;
-
-    x.set(rY);
-    y.set(rX);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
 
   return (
     <motion.div
-      ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.8, delay }}
-      style={{
-        transformStyle: "preserve-3d",
-        rotateX,
-        rotateY,
-      }}
       className="relative group w-full"
     >
       <div 
@@ -77,9 +32,7 @@ const TiltCard: React.FC<TiltCardProps> = ({ title, subtitle, tag, text, delay =
             <span className="font-mono text-xs text-[#91191a] bg-white/90 px-2 py-1 rounded-md font-bold tracking-widest uppercase">
                 {tag}
             </span>
-            <span className="font-mono text-[10px] text-white/40 tracking-widest">
-                // SYSTEM.CONF
-            </span>
+      
         </div>
 
         {/* Header */}

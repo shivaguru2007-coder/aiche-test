@@ -1,6 +1,6 @@
 import img from '../assets/insider.jpeg';
 import TickerTape from './tickerTape';
-
+import { motion } from 'framer-motion';
 const AboutEvents = () => {
     const handleClick = (url: string) => {
         window.open(url, "_blank");
@@ -51,8 +51,12 @@ const AboutEvents = () => {
             <div className="grid md:grid-cols-2 w-full md:mt-16 mt-8 gap-8 px-4 md:px-0">
                 
                 {/* === NEW "MEET THE TEAM" COMPONENT === */}
-                <div 
-                    onClick={() => handleClick("/board")} 
+                <motion.div 
+                    onClick={() => handleClick("/board")}             
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0}}
+                    viewport={{ once: true }} // `once: true` ensures it only triggers once
+                     transition={{ duration: 0.1, ease: "easeIn", delay: 0.2 }}
                     className="relative h-80 md:h-[500px] cursor-pointer group font-bold uppercase z-0"
                 >
                     {/* The 'Shadow' Layer (Solid Black Offset Box) */}
@@ -80,7 +84,7 @@ const AboutEvents = () => {
                              <span className="transform transition-transform duration-300 group-hover:translate-x-2">→</span>
                          </div>
                     </div>
-                </div>
+                </motion.div>
                 {/* === END NEW COMPONENT === */}
 
 
