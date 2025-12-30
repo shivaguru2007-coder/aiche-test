@@ -1,4 +1,4 @@
-import React from 'react';
+//import React from 'react';
 import { useMediumPosts } from './useMediumPosts';
 
 const MediumSection = ({ username }: { username: string }) => {
