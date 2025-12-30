@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, Variants } from 'framer-motion';
 import MagneticLine from './MagnetLines';
+
 interface EventItem {
   id: string;
   title: string;
@@ -9,6 +10,7 @@ interface EventItem {
   dotColor: string;
   gradient: string;
   colSpan?: string;
+  type: string;
 }
 
 const events: EventItem[] = [
@@ -20,6 +22,7 @@ const events: EventItem[] = [
     dotColor: 'bg-emerald-400',
     gradient: 'from-emerald-500/20 to-emerald-900/5',
     colSpan: 'md:col-span-1',
+    type: 'GRAVITAS',
   },
   {
     id: 'ae',
@@ -29,6 +32,7 @@ const events: EventItem[] = [
     dotColor: 'bg-amber-400',
     gradient: 'from-amber-500/20 to-amber-900/5',
     colSpan: 'md:col-span-1',
+    type: 'GRAVITAS',
   },
   {
     id: 'otr',
@@ -38,6 +42,7 @@ const events: EventItem[] = [
     dotColor: 'bg-cyan-400',
     gradient: 'from-cyan-500/20 to-cyan-900/5',
     colSpan: 'md:col-span-1',
+    type: 'GRAVITAS',
   },
   {
     id: 'astro',
@@ -47,6 +52,7 @@ const events: EventItem[] = [
     dotColor: 'bg-rose-500',
     gradient: 'from-rose-500/20 to-rose-900/5',
     colSpan: 'md:col-span-2',
+    type: 'GRAVITAS',
   },  
   {
     id: 'yantra',
@@ -56,10 +62,10 @@ const events: EventItem[] = [
     dotColor: 'bg-purple-500',
     gradient: 'from-purple-500/20 to-purple-900/5',
     colSpan: 'md:col-span-3',
+    type: 'YANTRA',
   },
 ];
 
-// --- Animation Variants ---
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
@@ -81,7 +87,6 @@ interface BentoCardProps {
   event: EventItem;
   index: number;
 }
-
 const BentoCard = ({ event, index }: BentoCardProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -90,17 +95,24 @@ const BentoCard = ({ event, index }: BentoCardProps) => {
       layout
       variants={cardVariants}
       onClick={() => setIsOpen(!isOpen)}
-      // Changed bg-[#111] to bg-zinc-900 so it stands out against the black page
       className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl bg-zinc-900 border border-white/10 p-8 transition-all duration-500 hover:border-white/20 hover:shadow-2xl hover:shadow-black/50 cursor-pointer ${event.colSpan || 'col-span-1'}`}
     >
       <div 
         className={`absolute inset-0 bg-gradient-to-br ${event.gradient} opacity-0 transition-opacity duration-500 group-hover:opacity-100`} 
       />
 
-      <motion.div layout="position" className="relative z-10 flex w-full items-start justify-between mb-4">
-        <span className="font-mono text-xs font-bold uppercase tracking-widest text-zinc-500 group-hover:text-white transition-colors">
-          {(index + 1).toString().padStart(2, '0')} / EVENT
-        </span>
+      {/* --- Header Section with Tag --- */}
+      <motion.div layout="position" className="relative z-10 flex w-full items-center justify-between mb-4">
+        <div className="flex items-center gap-3">
+            <span className="font-mono text-xs font-bold uppercase tracking-widest text-zinc-500 group-hover:text-white transition-colors">
+            {(index + 1).toString().padStart(2, '0')} / EVENT
+            </span>
+
+            {/* === GLASSMORPHIC TAG ADDED HERE === */}
+            <span className="px-2 py-1 rounded-md bg-white/5 border border-white/10 backdrop-blur-md text-[10px] font-mono font-bold tracking-wider text-zinc-300 shadow-sm">
+                {event.type}
+            </span>
+        </div>
         
         <span className="relative flex h-3 w-3">
           <span className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-0 group-hover:opacity-75 ${event.dotColor}`}></span>
@@ -125,13 +137,13 @@ const BentoCard = ({ event, index }: BentoCardProps) => {
 
       <motion.div layout="position" className="relative z-10 mt-8 flex items-center gap-2 overflow-hidden">
         <div className={`h-[1px] w-full bg-white/10 group-hover:bg-white/30 transition-colors`} />
+        {/* If you want text here, add children, otherwise it's just a spacer line currently */}
         <motion.span 
             key={isOpen ? "close" : "view"}
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             className={`font-mono text-xs uppercase ${event.color} whitespace-nowrap`}
         >
-          
         </motion.span>
       </motion.div>
     </motion.div>
@@ -140,26 +152,25 @@ const BentoCard = ({ event, index }: BentoCardProps) => {
 
 const GravitasEventsGallery = () => {
   return (
-    // Ensure min-h-screen and a visible background color
-    <section className="min-h-screen w-full bg-== px-6 py-24 selection:bg-white selection:text-black">
+    // Ensure parent background is set (e.g., bg-[#111] or bg-black)
+    <section className="min-h-screen w-full px-6 py-24 selection:bg-white selection:text-black">
       <MagneticLine/>
       <div className="mx-auto max-w-7xl">     
         <motion.div
-          // CHANGED: Trigger immediately, removed 'whileInView' to prevent hidden content bugs
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="mb-16 md:mb-24 flex flex-col md:flex-row md:items-end justify-between gap-6"
         >
           <div>
-            <p className="font-mono text-xs font-bold uppercase tracking-widest text-gray-900 mb-4">
+            <p className="font-mono text-xs font-bold uppercase tracking-widest text-gray-500 mb-4">
               [ Events ]
             </p>
-            <h2 className="text-6xl md:text-8xl font-black text-black uppercase tracking-tighter leading-[0.9]">
+            <h2 className="text-6xl md:text-8xl font-black text-white uppercase tracking-tighter leading-[0.9]">
               Highlights
             </h2>
           </div>
-          <p className="md:max-w-xs text-black text-sm leading-relaxed pb-2">
+          <p className="md:max-w-xs text-zinc-400 text-sm leading-relaxed pb-2">
             A collection of technical prowess and creative engineering from our recent flagship hackathons.
           </p>
         </motion.div>
@@ -167,7 +178,6 @@ const GravitasEventsGallery = () => {
         <motion.div
           variants={containerVariants}
           initial="hidden"
-          // CHANGED: Trigger immediately instead of on scroll
           animate="visible"
           className="grid gap-6 grid-cols-1 md:grid-cols-3 auto-rows-fr"
         >
