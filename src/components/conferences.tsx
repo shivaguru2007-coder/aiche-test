@@ -92,14 +92,12 @@ const Conferences: React.FC = () => {
             title="SRC"
             subtitle="Student Regional Conference"
             text="The AIChE Student Regional Conference (SRC) is one of the most anticipated annual events for chemical engineering students across India. Hosted each year by a different AIChE student chapter, the SRC brings together hundreds of students, faculty members, researchers, and industry professionals for a high-energy weekend of learning, competition, and collaboration. At its core, the SRC is designed to celebrate innovation, foster professional growth, and strengthen the student community within AIChE."
-            delay={0.1}
           />
           <TiltCard
             tag="02 // INTERNATIONAL"
             title="ASC"
             subtitle="Annual Student Conference"
             text="The Annual Student Conference (ASC) is the pinnacle of chemical engineering gatherings, a global stage where the brightest student minds converge to push the boundaries of innovation. Unlike typical conferences where ideas are merely discussed, ASC is where concepts are tested, executed, and brought to life. AIChE VIT has proudly marked its presence at this prestigious platform twice, representing India with distinction and demonstrating that our students compete at the highest level."
-            delay={0.3}
           />
         </div>
 

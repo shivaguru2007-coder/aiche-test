@@ -131,12 +131,12 @@ const Header = () => {
                     </div>
 
                     {/* RIGHT: Spotlight Image Section (Increased width to 45% and reduced padding) */}
-                    <div className="w-full lg:w-[45%] flex justify-center lg:justify-start lg:border-l border-black/10 lg:pl-10 py-4">
+                    <div className="w-full flex justify-center lg:justify-start lg:border-l border-black/10 lg:pl-10 py-4">
                         <motion.div 
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 1.2, duration: 0.8 }}
-                            className="relative w-full aspect-[4/3] overflow-hidden bg-black/5"
+                            className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-black/5"
                             onMouseMove={handleMouseMove}
                             onMouseEnter={() => setIsHovered(true)}
                             onMouseLeave={() => setIsHovered(false)}
@@ -145,12 +145,12 @@ const Header = () => {
                             <img 
                                 src={image} 
                                 alt="Core Team Grayscale" 
-                                className="absolute inset-0 w-full h-full object-cover filter grayscale contrast-125 pointer-events-none"
+                                className="absolute rounded-2xl inset-0 w-full h-full object-cover filter grayscale pointer-events-none"
                             />
 
                             {/* Layer 2: Color Image (Visible only via Mask) */}
                             <motion.div
-                                className="absolute inset-0 w-full h-full bg-transparent"
+                                className="absolute inset-0 rounded-2xl w-full h-full bg-transparent"
                                 animate={{ opacity: isHovered ? 1 : 0 }}
                                 transition={{ duration: 0.2 }}
                                 style={{ 
